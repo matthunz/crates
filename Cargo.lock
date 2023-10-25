@@ -1026,7 +1026,7 @@ checksum = "b3bd0dd2cd90571056fdb71f6275fada10131182f84899f4b2a916e565d81d86"
 [[package]]
 name = "lookbook"
 version = "0.1.0"
-source = "git+https://github.com/matthunz/lookbook#4dff820978737a330f219cc63ce394a0fe486f15"
+source = "git+https://github.com/matthunz/lookbook#0391183e5283d2e7bc285b9740e7d570326f88bf"
 dependencies = [
  "dioxus",
  "dioxus-material",
@@ -1045,7 +1045,7 @@ dependencies = [
 [[package]]
 name = "lookbook-macros"
 version = "0.1.0"
-source = "git+https://github.com/matthunz/lookbook#4dff820978737a330f219cc63ce394a0fe486f15"
+source = "git+https://github.com/matthunz/lookbook#0391183e5283d2e7bc285b9740e7d570326f88bf"
 dependencies = [
  "dioxus-rsx",
  "prettyplease",
