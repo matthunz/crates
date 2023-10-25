@@ -7,7 +7,7 @@ fn main() {
 
     fn app(cx: Scope) -> Element {
         render!(
-            Theme {
+            Theme { 
                 IconFont {}
                 Crates {}
             }
@@ -28,10 +28,7 @@ fn main() {
     }
 
     fn app(cx: Scope) -> Element {
-        render!(LookBook {
-            home: Home,
-            previews: [CrateItemPreview]
-        })
+        render!( LookBook { home: Home, previews: [CrateItemPreview] } )
     }
 
     dioxus_web::launch(app);

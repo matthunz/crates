@@ -19,20 +19,22 @@ pub fn CrateItem<'a>(
             display: "flex",
             flex_direction: "row",
             justify_content: "space-between",
+            gap: "10px",
             width: "100%",
-            max_width: "600px",
+            max_width: "800px",
             list_style: "none",
+            border_bottom: "2px solid #eee",
             div {
-                div { display: "flex", flex_direction: "row", gap: "10px",
-                    span { font_weight: 600, name }
-                    span { version }
+                div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
+                    span { font_weight: 600, max_width: "200px", overflow: "hidden", text_overflow: "ellipsis", name }
+                    Chip { onclick: |_| {}, version }
                 }
                 p { description }
                 ul { display: "flex", flex_direction: "row", gap: "10px", list_style: "none", margin: 0, padding: 0,
                     links.iter().map(|link| render!(Chip { onclick: |_| {}, "{link}" }))
                 }
             }
-            div { display: "flex", flex_direction: "column", gap: "5px",
+            div { display: "flex", flex_direction: "column", gap: "5px", min_width: "200px",
                 Statistic { icon: IconKind::Download, "{total_downloads}" }
                 Statistic { icon: IconKind::History, "{recent_downloads}" }
                 Statistic { icon: IconKind::Schedule, "{last_update}" }
@@ -84,20 +86,17 @@ pub fn CrateItemPreview<'a>(
     #[lookbook(default = vec![String::from("Homepage"), String::from("Documentation")])]
     links: lookbook::Json<Vec<String>>,
 ) -> Element<'a> {
-    render!(CrateItem {
-        name: name,
-        version: version,
-        description: description,
-        total_downloads: total_downloads.0,
-        recent_downloads: recent_downloads.0,
-        last_update: last_update,
-        links: &**cx.bump().alloc(
-            links
-                .0
-                .iter()
-                .cloned()
-                .map(|s| &**cx.bump().alloc(s))
-                .collect::<Vec<_>>()
-        )
-    })
+    render!(
+        CrateItem {
+            name: name,
+            version: version,
+            description: description,
+            total_downloads: total_downloads.0,
+            recent_downloads: recent_downloads.0,
+            last_update: last_update,
+            links: &**cx
+                .bump()
+                .alloc(links.0.iter().cloned().map(|s| &**cx.bump().alloc(s)).collect::<Vec<_>>())
+        }
+    )
 }
