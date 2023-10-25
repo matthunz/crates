@@ -8,6 +8,9 @@ lookbook = ["dep:lookbook"]
 
 [dependencies]
 dioxus = { git = "https://github.com/dioxuslabs/dioxus" }
+dioxus-signals = { git = "https://github.com/dioxuslabs/dioxus" }
 dioxus-web = { git = "https://github.com/dioxuslabs/dioxus" }
 dioxus-material = { git = "https://github.com/matthunz/dioxus-material" }
 lookbook = { git = "https://github.com/matthunz/lookbook", optional = true }
+reqwest = { version = "0.11.22", features = ["json"] }
+serde = { version = "1.0.189", features = ["derive"] }

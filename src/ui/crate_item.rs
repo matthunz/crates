@@ -7,7 +7,7 @@ pub fn CrateItem<'a>(
     name: &'a str,
     version: &'a str,
     description: &'a str,
-    total_downloads: &'a str,
+    total_downloads: u32,
     recent_downloads: u32,
     last_update: &'a str,
     links: &'a [&'a str],
@@ -51,7 +51,6 @@ fn Statistic<'a>(cx: Scope<'a>, icon: IconKind, children: Element<'a>) -> Elemen
     )
 }
 
-
 #[cfg(feature = "lookbook")]
 /// Text fields let users enter text into a UI.
 #[lookbook::preview]
@@ -70,8 +69,8 @@ pub fn CrateItemPreview<'a>(
     description: &'a str,
 
     /// Total downloads the crate has received.
-    #[lookbook(default = "25,032")]
-    total_downloads: &'a str,
+    #[lookbook(default = 25032)]
+    total_downloads: lookbook::Json<u32>,
 
     /// Recent downloads the crate has received.
     #[lookbook(default = 164)]
@@ -89,7 +88,7 @@ pub fn CrateItemPreview<'a>(
         name: name,
         version: version,
         description: description,
-        total_downloads: total_downloads,
+        total_downloads: total_downloads.0,
         recent_downloads: recent_downloads.0,
         last_update: last_update,
         links: &**cx.bump().alloc(

@@ -2,8 +2,16 @@ use dioxus::prelude::*;
 
 #[cfg(not(feature = "lookbook"))]
 fn main() {
+    use crates::ui::Crates;
+    use dioxus_material::{IconFont, Theme};
+
     fn app(cx: Scope) -> Element {
-        render!(h1 { "Hello World!" })
+        render!(
+            Theme {
+                IconFont {}
+                Crates {}
+            }
+        )
     }
 
     dioxus_web::launch(app);
