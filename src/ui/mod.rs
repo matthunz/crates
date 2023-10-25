@@ -5,3 +5,7 @@ pub use crate_item::{CrateItem, CrateItemProps};
 
 mod crates;
 pub use crates::Crates;
+
+mod krate;
+#[cfg(feature = "lookbook")]
+pub use krate::KratePreview;
