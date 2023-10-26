@@ -11,14 +11,14 @@ pub fn SearchScreen(cx: Scope, query: String) -> Element {
     let navigator = use_navigator(cx);
     let crates = use_signal(cx, || None);
 
-
     use_effect(cx, query, |query_string| async move {
-        let q = query_string.strip_prefix("q=").unwrap_or_default().to_owned();
-     
+        let q = query_string
+            .strip_prefix("q=")
+            .unwrap_or_default()
+            .to_owned();
 
         let data = api::get_crates(1, 50, &q).await.unwrap();
         crates.set(Some(data));
-
     });
 
     render!(

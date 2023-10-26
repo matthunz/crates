@@ -40,6 +40,7 @@ pub struct CrateData {
 pub struct Version {
     pub features: HashMap<String, Vec<String>>,
     pub num: String,
+    pub readme_path: String,
 }
 
 pub async fn get_crate(name: &str) -> reqwest::Result<CrateData> {

@@ -18,7 +18,7 @@ pub fn KrateScreen(cx: Scope, name: String, tab: KrateTab) -> Element {
 
     let selected = match tab {
         KrateTab::Readme => 0,
-        KrateTab::Versions => 1
+        KrateTab::Versions => 1,
     };
 
     if let Some(krate) = &*crates_ref {

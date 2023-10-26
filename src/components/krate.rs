@@ -11,10 +11,10 @@ pub fn Krate<'a>(
     description: &'a str,
     versions: &'a [Version],
     selected: usize,
-    onselect: EventHandler<'a, usize>
+    onselect: EventHandler<'a, usize>,
 ) -> Element<'a> {
     render!(
-        div { width: "100%", max_width: "800px", margin: "auto",
+        div { flex: 1, display: "flex", flex_direction: "column", max_width: "800px",
             div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 h2 { name }
                 Chip { onclick: |_| {}, version }
@@ -32,7 +32,18 @@ pub fn Krate<'a>(
                         render!(TabItem { icon : IconKind::AccountTree, label : "Dependents" }),
                     ])
             }
-            ul { list_style: "none", versions.iter().map(|version| render!(li { "{version.num}" })) }
+            match selected {
+                0 => versions
+                        .first()
+                        .and_then(|version| render!(iframe {
+                            src: "https://crates.io{version.readme_path}",
+                            flex: 1,
+                            outline: "none",
+                            border: "none"
+                        })),
+                1 => render!(ul { display: "flex", flex_direction: "column", gap: "10px", list_style: "none", versions.iter().map(|version| render!(li { "{version.num}" })) }),
+                _ => todo!()
+            }
         }
     )
 }
@@ -87,5 +98,6 @@ fn versions() -> Vec<Version> {
     vec![Version {
         features: std::collections::HashMap::new(),
         num: String::from("v0.1.0"),
+        readme_path: String::from(""),
     }]
 }

@@ -1,4 +1,4 @@
-use std::{str::FromStr, fmt};
+use std::{fmt, str::FromStr};
 
 use dioxus::prelude::*;
 use dioxus_material::{use_theme, Icon, IconKind, NavigationRail, NavigationRailItem};
@@ -15,27 +15,31 @@ use self::screens::{ExploreScreen, KrateScreen, SearchScreen};
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 enum KrateTab {
     Readme,
-    Versions
+    Versions,
 }
 
 impl FromStr for KrateTab {
     type Err = String;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-       Ok( match s {
-            "readme" => Self::Readme,
+        Ok(match s {
+            "" => Self::Readme,
             "versions" => Self::Versions,
-            _ => todo!()
+            _ => todo!(),
         })
     }
 }
 
 impl fmt::Display for KrateTab {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", match self {
-            Self::Readme => "readme",
-            Self::Versions => "versions"
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::Readme => "",
+                Self::Versions => "versions",
+            }
+        )
     }
 }
 
@@ -47,9 +51,8 @@ pub enum Route {
     #[route("/search/?:query")]
     SearchScreen { query: String },
     #[route("/crate/:name/:tab")]
-    KrateScreen { name: String, tab: KrateTab }
+    KrateScreen { name: String, tab: KrateTab },
 }
-
 
 #[component]
 pub fn Wrap(cx: Scope) -> Element {
@@ -134,7 +137,7 @@ pub fn Wrap(cx: Scope) -> Element {
                         onchange: move |event: FormEvent| { query_ref.set(event.value.clone()) }
                     }
                 }
-                div { flex: 1, overflow_y: "auto", Outlet::<Route> {} }
+                div { flex: 1, display: "flex", flex_direction: "row", justify_content: "center", overflow_y: "auto", Outlet::<Route> {} }
             }
         }
     )
