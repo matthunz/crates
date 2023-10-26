@@ -11,20 +11,22 @@ pub fn ExploreScreen(cx: Scope, query: String) -> Element {
     let navigator = use_navigator(cx);
     let theme = use_theme(cx);
 
-    
-
     let crates = use_signal(cx, || None);
-    let query_ref = use_signal(cx, || query.strip_prefix("q=").unwrap().to_owned());
-    let query_str = query_ref.read();
-
-    use_effect(cx, (), |_| async move {
-        let data = api::get_crates(1, 50, &query_ref.read()).await.unwrap();
-        crates.set(Some(data));
+    let query_ref = use_signal(cx, || {
+        query.strip_prefix("q=").unwrap_or_default().to_owned()
     });
 
-    
+    use_effect(cx, query, |query_string| async move {
+        let q = query_string.strip_prefix("q=").unwrap_or_default().to_owned();
+     
+
+        let data = api::get_crates(1, 50, &q).await.unwrap();
+        crates.set(Some(data));
+
+        query_ref.set(q);
+    });
+
     render!(
-        h1 { "" }
         ul {
             display: "flex",
             flex_direction: "column",
@@ -49,14 +51,10 @@ pub fn ExploreScreen(cx: Scope, query: String) -> Element {
                         .push(Route::ExploreScreen {
                             query: format!("q={}", query_ref.read()),
                         });
-                    async move {
-                        let data = api::get_crates(1, 50, &query_ref.read()).await.unwrap();
-                        crates.set(Some(data));
-                    }
                 },
                 Icon { kind: dioxus_material::IconKind::Search }
                 input {
-                    value: "{query_str}",
+                    value: "{query_ref}",
                     placeholder: "Search",
                     flex: 1,
                     margin: 0,
