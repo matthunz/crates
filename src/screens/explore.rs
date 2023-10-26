@@ -7,20 +7,24 @@ use dioxus_signals::use_signal;
 use js_sys::Date;
 
 #[component]
-pub fn ExploreScreen(cx: Scope) -> Element {
+pub fn ExploreScreen(cx: Scope, query: String) -> Element {
     let navigator = use_navigator(cx);
     let theme = use_theme(cx);
 
+    
+
     let crates = use_signal(cx, || None);
-    let query = use_signal(cx, || String::new());
-    let query_str = query.read();
+    let query_ref = use_signal(cx, || query.strip_prefix("q=").unwrap().to_owned());
+    let query_str = query_ref.read();
 
     use_effect(cx, (), |_| async move {
-        let data = api::get_crates(1, 50, &query.read()).await.unwrap();
+        let data = api::get_crates(1, 50, &query_ref.read()).await.unwrap();
         crates.set(Some(data));
     });
 
+    
     render!(
+        h1 { "" }
         ul {
             display: "flex",
             flex_direction: "column",
@@ -40,9 +44,15 @@ pub fn ExploreScreen(cx: Scope) -> Element {
                 background: "#eee",
                 border_radius: &*theme.border_radius_small,
                 prevent_default: "onchange",
-                onsubmit: move |_| async move {
-                    let data = api::get_crates(1, 50, &query.read()).await.unwrap();
-                    crates.set(Some(data));
+                onsubmit: move |_| {
+                    navigator
+                        .push(Route::ExploreScreen {
+                            query: format!("q={}", query_ref.read()),
+                        });
+                    async move {
+                        let data = api::get_crates(1, 50, &query_ref.read()).await.unwrap();
+                        crates.set(Some(data));
+                    }
                 },
                 Icon { kind: dioxus_material::IconKind::Search }
                 input {
@@ -55,16 +65,16 @@ pub fn ExploreScreen(cx: Scope) -> Element {
                     outline: "none",
                     border: "none",
                     background: "none",
-                    onchange: move |event: FormEvent| { query.set(event.value.clone()) }
+                    onchange: move |event: FormEvent| { query_ref.set(event.value.clone()) }
                 }
             }
             if let Some(crates) = &*crates.read() {
                 render!(crates.iter().map(|krate| {
                     let date = Date::parse(&krate.updated_at);
                     let last_update = format_distance_to_now(date);
-
+            
                     let name = krate.name.clone();
-
+            
                     render!(KrateItem {
                         name: "{krate.name}",
                         version: "{krate.newest_version}",

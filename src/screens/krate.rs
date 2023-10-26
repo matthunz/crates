@@ -17,11 +17,13 @@ pub fn KrateScreen(cx: Scope, name: String) -> Element {
     if let Some(krate) = &*crates_ref {
         let description = krate.krate.description.as_deref().unwrap_or_default();
 
-        render!(Krate {
-            name: "{name}",
-            description: "{description}",
-            version: "{krate.krate.newest_version}"
-        })
+        render!(
+            Krate {
+                name: "{name}",
+                description: "{description}",
+                version: "{krate.krate.newest_version}"
+            }
+        )
     } else {
         None
     }

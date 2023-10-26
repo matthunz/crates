@@ -113,21 +113,18 @@ pub fn KrateItemPreview<'a>(
     #[lookbook(default = vec![String::from("Homepage"), String::from("Documentation")])]
     links: lookbook::Json<Vec<String>>,
 ) -> Element<'a> {
-    render!(KrateItem {
-        name: name,
-        version: version,
-        description: description,
-        total_downloads: total_downloads.0,
-        recent_downloads: recent_downloads.0,
-        last_update: last_update,
-        links: &**cx.bump().alloc(
-            links
-                .0
-                .iter()
-                .cloned()
-                .map(|s| &**cx.bump().alloc(s))
-                .collect::<Vec<_>>()
-        ),
-        onclick: |_| {}
-    })
+    render!(
+        KrateItem {
+            name: name,
+            version: version,
+            description: description,
+            total_downloads: total_downloads.0,
+            recent_downloads: recent_downloads.0,
+            last_update: last_update,
+            links: &**cx
+                .bump()
+                .alloc(links.0.iter().cloned().map(|s| &**cx.bump().alloc(s)).collect::<Vec<_>>()),
+            onclick: |_| {}
+        }
+    )
 }
