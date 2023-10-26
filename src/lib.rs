@@ -25,7 +25,7 @@ pub fn Wrap(cx: Scope) -> Element {
 
     render!(
         div { display: "flex", flex_direction: "row", font_family: "sans-serif",
-            NavigationRail {
+            NavigationRail { 
                 NavigationRailItem {
                     icon: render!(Icon { kind : IconKind::Explore }),
                     label: render!("Explore"),

@@ -1,8 +1,9 @@
 use dioxus::prelude::*;
 use dioxus_material::{use_theme, Chip, Icon, IconKind};
 
+/// Item of a list of crates.
 #[component]
-pub fn CrateItem<'a>(
+pub fn KrateItem<'a>(
     cx: Scope<'a>,
     name: &'a str,
     version: &'a str,
@@ -68,7 +69,7 @@ fn Statistic<'a>(cx: Scope<'a>, icon: IconKind, children: Element<'a>) -> Elemen
 #[lookbook::preview]
 pub fn CrateItemPreview<'a>(
     cx: Scope,
-    /// Label for the text field.
+    /// Name of the crate.
     #[lookbook(default = "tokio")]
     name: &'a str,
 
@@ -96,21 +97,18 @@ pub fn CrateItemPreview<'a>(
     #[lookbook(default = vec![String::from("Homepage"), String::from("Documentation")])]
     links: lookbook::Json<Vec<String>>,
 ) -> Element<'a> {
-    render!(CrateItem {
-        name: name,
-        version: version,
-        description: description,
-        total_downloads: total_downloads.0,
-        recent_downloads: recent_downloads.0,
-        last_update: last_update,
-        links: &**cx.bump().alloc(
-            links
-                .0
-                .iter()
-                .cloned()
-                .map(|s| &**cx.bump().alloc(s))
-                .collect::<Vec<_>>()
-        ),
-        onclick: |_| {}
-    })
+    render!(
+        KrateItem {
+            name: name,
+            version: version,
+            description: description,
+            total_downloads: total_downloads.0,
+            recent_downloads: recent_downloads.0,
+            last_update: last_update,
+            links: &**cx
+                .bump()
+                .alloc(links.0.iter().cloned().map(|s| &**cx.bump().alloc(s)).collect::<Vec<_>>()),
+            onclick: |_| {}
+        }
+    )
 }

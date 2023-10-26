@@ -33,7 +33,7 @@ pub fn Krate<'a>(
 #[component]
 fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
     render!(
-        Tab {
+        Tab { 
             div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 Icon { kind: *icon }
                 label
@@ -46,15 +46,20 @@ fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
 #[lookbook::preview]
 pub fn KratePreview<'a>(
     cx: Scope<'a>,
-    #[lookbook(default = "tokio")] name: &'a str,
+
+    /// Name of the crate.
+    #[lookbook(default = "dioxus")]
+    name: &'a str,
+
     /// Semver version of the crate.
-    #[lookbook(default = "v0.1.0")]
+    #[lookbook(default = "v0.5.0")]
     version: &'a str,
-    #[lookbook(default = "Hello world!")] description: &'a str,
+
+    /// Description of the crate.
+    #[lookbook(
+        default = "Portable, performant, and ergonomic framework for building cross-platform user interfaces in Rust"
+    )]
+    description: &'a str,
 ) -> Element<'a> {
-    render!(Krate {
-        name: name,
-        version: version,
-        description: description
-    })
+    render!( Krate { name: name, version: version, description: description } )
 }

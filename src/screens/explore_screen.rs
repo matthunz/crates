@@ -1,4 +1,4 @@
-use crate::{api, components::CrateItem, Route};
+use crate::{api, components::KrateItem, Route};
 use chrono::{TimeZone, Utc};
 use dioxus::prelude::*;
 use dioxus_router::prelude::use_navigator;
@@ -28,10 +28,10 @@ pub fn ExploreScreen(cx: Scope) -> Element {
                 render!(crates.iter().map(|krate| {
                     let date = Date::parse(&krate.updated_at);
                     let last_update = format_distance_to_now(date);
-
+            
                     let name = krate.name.clone();
-
-                    render!(CrateItem {
+            
+                    render!(KrateItem {
                         name: "{krate.name}",
                         version: "{krate.newest_version}",
                         description: "{krate.description.clone().unwrap_or_default()}",

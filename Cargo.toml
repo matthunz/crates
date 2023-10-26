@@ -6,6 +6,7 @@ license = "MIT OR Apache-2.0"
 
 [features]
 lookbook = ["dep:lookbook"]
+full = ["lookbook"]
 
 [dependencies]
 dioxus = { git = "https://github.com/dioxuslabs/dioxus" }
