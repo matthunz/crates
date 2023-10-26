@@ -1,17 +1,33 @@
 use dioxus::prelude::*;
 use dioxus_material::{use_theme, Chip, Icon, IconKind};
 
-/// Item of a list of crates.
+/// Item in a list of crates.
 #[component]
 pub fn KrateItem<'a>(
     cx: Scope<'a>,
+
+    /// Name of the crate.
     name: &'a str,
+
+    /// Semver version of the crate.
     version: &'a str,
+
+    /// Description of the crate.
     description: &'a str,
+
+    /// Total downloads the crate has received.
     total_downloads: u32,
+
+    /// Recent downloads the crate has received.
     recent_downloads: u32,
+
+    /// Last date the crate was updated.
     last_update: &'a str,
+
+    /// Links in the crate's `Cargo.toml`.
     links: &'a [&'a str],
+
+    /// Handler for click events.
     onclick: EventHandler<'a>,
 ) -> Element<'a> {
     let _theme = use_theme(cx);
@@ -65,9 +81,9 @@ fn Statistic<'a>(cx: Scope<'a>, icon: IconKind, children: Element<'a>) -> Elemen
 }
 
 #[cfg(feature = "lookbook")]
-/// Text fields let users enter text into a UI.
+/// Item in a list of crates.
 #[lookbook::preview]
-pub fn CrateItemPreview<'a>(
+pub fn KrateItemPreview<'a>(
     cx: Scope,
     /// Name of the crate.
     #[lookbook(default = "tokio")]

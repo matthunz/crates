@@ -7,8 +7,7 @@ pub mod api;
 pub mod components;
 
 mod screens;
-
-use screens::{ExploreScreen, KrateScreen};
+use self::screens::{ExploreScreen, KrateScreen};
 
 #[derive(Clone, Routable, Debug, PartialEq)]
 pub enum Route {

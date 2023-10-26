@@ -20,7 +20,7 @@ fn main() {
 
 #[cfg(feature = "lookbook")]
 fn main() {
-    use crates::components::{CrateItemPreview, KratePreview};
+    use crates::components::{KrateItemPreview, KratePreview};
     use lookbook::LookBook;
 
     #[component]
@@ -29,7 +29,7 @@ fn main() {
     }
 
     fn app(cx: Scope) -> Element {
-        render!( LookBook { home: Home, previews: [CrateItemPreview, KratePreview] } )
+        render!( LookBook { home: Home, previews: [KrateItemPreview, KratePreview] } )
     }
 
     dioxus_web::launch(app);
