@@ -41,7 +41,7 @@ pub fn Krate<'a>(
 #[component]
 fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
     render!(
-        Tab {
+        Tab { 
             div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 Icon { kind: *icon }
                 label
@@ -71,12 +71,14 @@ pub fn KratePreview<'a>(
 
     #[lookbook(default =versions())] versions: lookbook::Json<Vec<Version>>,
 ) -> Element<'a> {
-    render!(Krate {
-        name: name,
-        version: version,
-        description: description,
-        versions: cx.bump().alloc(versions.0.clone())
-    })
+    render!(
+        Krate {
+            name: name,
+            version: version,
+            description: description,
+            versions: cx.bump().alloc(versions.0.clone())
+        }
+    )
 }
 
 #[cfg(feature = "lookbook")]
