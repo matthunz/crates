@@ -1,12 +1,15 @@
 use dioxus::prelude::*;
 use dioxus_material::{Chip, Icon, IconKind, Tab, TabRow};
 
+use crate::api::Version;
+
 #[component]
 pub fn Krate<'a>(
     cx: Scope<'a>,
     name: &'a str,
     version: &'a str,
     description: &'a str,
+    versions: &'a [Version],
 ) -> Element<'a> {
     render!(
         div { width: "100%", max_width: "800px", margin: "auto",
@@ -26,6 +29,11 @@ pub fn Krate<'a>(
                         render!(TabItem { icon : IconKind::AccountTree, label : "Dependents" }),
                     ])
             }
+            versions.iter().map(|version| render!(li {
+                div {
+                    "{version.num}"
+                }
+            }))
         }
     )
 }
@@ -33,7 +41,7 @@ pub fn Krate<'a>(
 #[component]
 fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
     render!(
-        Tab { 
+        Tab {
             div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 Icon { kind: *icon }
                 label
@@ -60,6 +68,21 @@ pub fn KratePreview<'a>(
         default = "Portable, performant, and ergonomic framework for building cross-platform user interfaces in Rust"
     )]
     description: &'a str,
+
+    #[lookbook(default =versions())] versions: lookbook::Json<Vec<Version>>,
 ) -> Element<'a> {
-    render!( Krate { name: name, version: version, description: description } )
+    render!(Krate {
+        name: name,
+        version: version,
+        description: description,
+        versions: cx.bump().alloc(versions.0.clone())
+    })
+}
+
+#[cfg(feature = "lookbook")]
+fn versions() -> Vec<Version> {
+    vec![Version {
+        features: std::collections::HashMap::new(),
+        num: String::from("v0.1.0"),
+    }]
 }

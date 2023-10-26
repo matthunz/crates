@@ -21,7 +21,8 @@ pub fn KrateScreen(cx: Scope, name: String) -> Element {
             Krate {
                 name: "{name}",
                 description: "{description}",
-                version: "{krate.krate.newest_version}"
+                version: "{krate.krate.newest_version}",
+                versions: cx.bump().alloc(krate.versions.clone())
             }
         )
     } else {

@@ -53,7 +53,7 @@ pub fn KrateItem<'a>(
                 }
                 Chip { onclick: |_| onclick.call(()), version }
             }
-            p {margin: 0, padding: 0, description }
+            p { margin: 0, padding: 0, description }
             ul { display: "flex", flex_direction: "row", gap: "10px", list_style: "none", margin: 0, padding: 0,
                 links.iter().map(|link| render!(Chip { onclick: |_| {}, "{link}" }))
             }

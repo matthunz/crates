@@ -1,4 +1,6 @@
-use serde::Deserialize;
+use std::collections::HashMap;
+
+use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize)]
 pub struct CrateItemData {
@@ -31,6 +33,13 @@ pub async fn get_crates(
 pub struct CrateData {
     #[serde(rename = "crate")]
     pub krate: CrateItemData,
+    pub versions: Vec<Version>,
+}
+
+#[derive(Clone, Deserialize, Serialize)]
+pub struct Version {
+    pub features: HashMap<String, Vec<String>>,
+    pub num: String,
 }
 
 pub async fn get_crate(name: &str) -> reqwest::Result<CrateData> {
