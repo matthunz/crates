@@ -10,11 +10,7 @@ pub fn Krate<'a>(
 ) -> Element<'a> {
     render!(
         div { width: "100%", max_width: "800px", margin: "auto",
-            div {
-                display: "flex",
-                flex_direction: "row",
-                align_items: "center",
-                gap: "10px",
+            div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 h2 { name }
                 Chip { onclick: |_| {}, version }
             }

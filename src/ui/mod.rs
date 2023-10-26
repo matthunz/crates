@@ -1,4 +1,5 @@
 use dioxus::prelude::*;
+use dioxus_material::{Icon, IconKind, NavigationRail, NavigationRailItem};
 use dioxus_router::prelude::*;
 
 mod crate_item;
@@ -29,8 +30,30 @@ pub enum Route {
 
 #[component]
 pub fn Wrap(cx: Scope) -> Element {
+    let navigator = use_navigator(cx);
+
     render!(
-        div { font_family: "sans-serif", Outlet::<Route> {} }
+        div { display: "flex", flex_direction: "row", font_family: "sans-serif",
+            NavigationRail {
+                NavigationRailItem {
+                    icon: render!(Icon { kind : IconKind::Explore }),
+                    label: render!("Explore"),
+                    is_selected: true,
+                    onselect: |_| {
+                        navigator.push(Route::HomeScreen);
+                    }
+                }
+                NavigationRailItem {
+                    icon: render!(Icon { kind : IconKind::Person }),
+                    label: render!("Sign in"),
+                    is_selected: false,
+                    onselect: |_| {
+                        navigator.push(Route::HomeScreen);
+                    }
+                }
+            }
+            Outlet::<Route> {}
+        }
     )
 }
 
