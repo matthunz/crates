@@ -11,6 +11,7 @@ pub fn CrateItem<'a>(
     recent_downloads: u32,
     last_update: &'a str,
     links: &'a [&'a str],
+    onclick: EventHandler<'a>
 ) -> Element<'a> {
     let _theme = use_theme(cx);
 
@@ -26,8 +27,16 @@ pub fn CrateItem<'a>(
             border_bottom: "2px solid #eee",
             div {
                 div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
-                    span { font_weight: 600, max_width: "200px", overflow: "hidden", text_overflow: "ellipsis", name }
-                    Chip { onclick: |_| {}, version }
+                    span {
+                        font_weight: 600,
+                        max_width: "200px",
+                        overflow: "hidden",
+                        text_overflow: "ellipsis",
+                        cursor: "pointer",
+                        onclick: |_| onclick.call(()),
+                        name
+                    }
+                    Chip { onclick: |_| onclick.call(()), version }
                 }
                 p { description }
                 ul { display: "flex", flex_direction: "row", gap: "10px", list_style: "none", margin: 0, padding: 0,
@@ -96,7 +105,8 @@ pub fn CrateItemPreview<'a>(
             last_update: last_update,
             links: &**cx
                 .bump()
-                .alloc(links.0.iter().cloned().map(|s| &**cx.bump().alloc(s)).collect::<Vec<_>>())
+                .alloc(links.0.iter().cloned().map(|s| &**cx.bump().alloc(s)).collect::<Vec<_>>()),
+            onclick: |_| {}
         }
     )
 }

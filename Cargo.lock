@@ -265,6 +265,7 @@ dependencies = [
  "chrono",
  "dioxus",
  "dioxus-material",
+ "dioxus-router",
  "dioxus-signals",
  "dioxus-web",
  "js-sys",

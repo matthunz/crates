@@ -1,12 +1,16 @@
-use crate::{api, ui::CrateItem};
-
-use chrono::{Utc, TimeZone};
+use crate::{
+    api,
+    ui::{CrateItem, Route},
+};
+use chrono::{TimeZone, Utc};
 use dioxus::prelude::*;
+use dioxus_router::prelude::use_navigator;
 use dioxus_signals::use_signal;
 use js_sys::Date;
 
 #[component]
-pub fn Crates(cx: Scope) -> Element {
+pub fn KratesScreen(cx: Scope) -> Element {
+    let navigator = use_navigator(cx);
     let crates = use_signal(cx, || None);
 
     use_effect(cx, (), |_| async move {
@@ -28,6 +32,8 @@ pub fn Crates(cx: Scope) -> Element {
                     let date = Date::parse(&krate.updated_at);
                     let last_update = format_distance_to_now(date);
             
+                    let name = krate.name.clone();
+            
                     render!(CrateItem {
                         name: "{krate.name}",
                         version: "{krate.newest_version}",
@@ -35,7 +41,10 @@ pub fn Crates(cx: Scope) -> Element {
                         total_downloads: krate.downloads,
                         recent_downloads: krate.recent_downloads,
                         last_update: "{last_update}",
-                        links: &[]
+                        links: &[],
+                        onclick: move |_| {
+                            navigator.push(Route::KrateScreen { name: name.clone()  });
+                        }
                     })
                 }))
             } else {

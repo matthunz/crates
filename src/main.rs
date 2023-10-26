@@ -2,14 +2,15 @@ use dioxus::prelude::*;
 
 #[cfg(not(feature = "lookbook"))]
 fn main() {
-    use crates::ui::Crates;
+    use crates::ui::{KratesScreen, Route};
     use dioxus_material::{IconFont, Theme};
+    use dioxus_router::prelude::Router;
 
     fn app(cx: Scope) -> Element {
         render!(
             Theme { 
                 IconFont {}
-                Crates {}
+                Router::<Route> {}
             }
         )
     }
