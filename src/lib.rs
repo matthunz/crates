@@ -1,9 +1,8 @@
-use std::{fmt, str::FromStr};
-
 use dioxus::prelude::*;
 use dioxus_material::{use_theme, Icon, IconKind, NavigationRail, NavigationRailItem};
 use dioxus_router::prelude::*;
 use dioxus_signals::use_signal;
+use std::{fmt, str::FromStr};
 
 pub mod api;
 
@@ -13,7 +12,7 @@ mod screens;
 use self::screens::{ExploreScreen, KrateScreen, SearchScreen};
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum KrateTab {
+pub enum KrateTab {
     Readme,
     Versions,
 }
@@ -88,7 +87,7 @@ pub fn Wrap(cx: Scope) -> Element {
             display: "flex",
             flex_direction: "row",
             font_family: "sans-serif",
-            NavigationRail { 
+            NavigationRail {
                 NavigationRailItem {
                     icon: render!(Icon { kind : IconKind::Explore }),
                     label: render!("Explore"),

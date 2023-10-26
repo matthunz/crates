@@ -1,7 +1,7 @@
 use crate::{api, components::KrateItem, Route};
 use chrono::{TimeZone, Utc};
 use dioxus::prelude::*;
-use dioxus_material::{use_theme, Icon};
+
 use dioxus_router::prelude::use_navigator;
 use dioxus_signals::use_signal;
 use js_sys::Date;

@@ -1,7 +1,6 @@
+use crate::api::Version;
 use dioxus::prelude::*;
 use dioxus_material::{Chip, Icon, IconKind, Tab, TabRow};
-
-use crate::api::Version;
 
 #[component]
 pub fn Krate<'a>(
