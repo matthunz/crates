@@ -116,7 +116,7 @@ fn format_distance_to_now(ms: f64) -> String {
         } else {
             return format!("in {} hour(s)", hours);
         }
-    } else if abs_duration < 604800 {
+    } else if abs_duration < 31536000 {
         let days = abs_duration / 86400;
         if duration.num_seconds() >= 0 {
             return format!("{} day(s) ago", days);

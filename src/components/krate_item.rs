@@ -35,33 +35,29 @@ pub fn KrateItem<'a>(
     render!(
         li {
             display: "flex",
-            flex_direction: "row",
-            justify_content: "space-between",
-            gap: "10px",
+            flex_direction: "column",
             width: "100%",
             max_width: "800px",
             list_style: "none",
             padding_bottom: "20px",
             border_bottom: "2px solid #eee",
-            div {
-                div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
-                    span {
-                        font_weight: 600,
-                        max_width: "200px",
-                        overflow: "hidden",
-                        text_overflow: "ellipsis",
-                        cursor: "pointer",
-                        onclick: |_| onclick.call(()),
-                        name
-                    }
-                    Chip { onclick: |_| onclick.call(()), version }
+            div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px", margin_bottom: "10px",
+                span {
+                    font_weight: 600,
+                    max_width: "200px",
+                    overflow: "hidden",
+                    text_overflow: "ellipsis",
+                    cursor: "pointer",
+                    onclick: |_| onclick.call(()),
+                    name
                 }
-                p { description }
-                ul { display: "flex", flex_direction: "row", gap: "10px", list_style: "none", margin: 0, padding: 0,
-                    links.iter().map(|link| render!(Chip { onclick: |_| {}, "{link}" }))
-                }
+                Chip { onclick: |_| onclick.call(()), version }
             }
-            div { display: "flex", flex_direction: "column", gap: "10px", min_width: "200px",
+            p {margin: 0, padding: 0, description }
+            ul { display: "flex", flex_direction: "row", gap: "10px", list_style: "none", margin: 0, padding: 0,
+                links.iter().map(|link| render!(Chip { onclick: |_| {}, "{link}" }))
+            }
+            div { display: "flex", flex_direction: "row", align_items: "center", margin_top: "20px",
                 Statistic { icon: IconKind::Download, "{total_downloads}" }
                 Statistic { icon: IconKind::History, "{recent_downloads}" }
                 Statistic { icon: IconKind::Schedule, "{last_update}" }
@@ -73,7 +69,7 @@ pub fn KrateItem<'a>(
 #[component]
 fn Statistic<'a>(cx: Scope<'a>, icon: IconKind, children: Element<'a>) -> Element<'a> {
     render!(
-        div { display: "flex", flex_direction: "row", align_items: "center", gap: "5px",
+        div { flex: 1, display: "flex", flex_direction: "row", align_items: "center", gap: "5px",
             Icon { kind: *icon }
             span { children }
         }
