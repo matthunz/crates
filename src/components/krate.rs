@@ -32,19 +32,33 @@ pub fn Krate<'a>(
                     ])
             }
             match selected {
-                0 => versions
-                        .first()
-                        .and_then(|version| render!(iframe {
-                            src: "https://crates.io{version.readme_path}",
-                            flex: 1,
-                            outline: "none",
-                            border: "none"
-                        })),
+                0 => render!(ReadmeTab { versions: *versions }),
                 1 => render!(ul { display: "flex", flex_direction: "column", gap: "10px", list_style: "none", versions.iter().map(|version| render!(li { "{version.num}" })) }),
                 _ => todo!()
             }
         }
     )
+}
+
+#[component]
+fn ReadmeTab<'a>(cx: Scope<'a>, versions: &'a [Version]) -> Element<'a> {
+    let readme_task = use_future(cx, (), |_| {
+        let readme_path = versions
+            .first()
+            .map(|version| version.readme_path.clone())
+            .unwrap_or_default();
+        async move {
+            reqwest::get(&format!("https://crates.io{readme_path}")).await.unwrap().text().await.unwrap()
+            
+        }
+    });
+
+    if let Some(readme) = readme_task.value() {
+        render!( div { dangerous_inner_html: "{readme}" } )
+    } else {
+        None
+    }
+    
 }
 
 #[component]
