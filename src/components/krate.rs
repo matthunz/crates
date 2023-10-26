@@ -14,7 +14,6 @@ pub fn Krate<'a>(
                 h2 { name }
                 Chip { onclick: |_| {}, version }
             }
-
             p { description }
             TabRow {
                 onselect: |_| {},

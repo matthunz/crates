@@ -1,7 +1,4 @@
-use crate::{
-    api,
-    ui::{CrateItem, Route},
-};
+use crate::{api, components::CrateItem, Route};
 use chrono::{TimeZone, Utc};
 use dioxus::prelude::*;
 use dioxus_router::prelude::use_navigator;
@@ -9,7 +6,7 @@ use dioxus_signals::use_signal;
 use js_sys::Date;
 
 #[component]
-pub fn KratesScreen(cx: Scope) -> Element {
+pub fn ExploreScreen(cx: Scope) -> Element {
     let navigator = use_navigator(cx);
     let crates = use_signal(cx, || None);
 

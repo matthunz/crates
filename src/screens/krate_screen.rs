@@ -1,4 +1,4 @@
-use crate::{api, ui::krate::Krate};
+use crate::{api, components::Krate};
 use dioxus::prelude::*;
 use dioxus_signals::use_signal;
 

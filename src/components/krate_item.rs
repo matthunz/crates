@@ -24,6 +24,7 @@ pub fn CrateItem<'a>(
             width: "100%",
             max_width: "800px",
             list_style: "none",
+            padding_bottom: "20px",
             border_bottom: "2px solid #eee",
             div {
                 div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
@@ -43,7 +44,7 @@ pub fn CrateItem<'a>(
                     links.iter().map(|link| render!(Chip { onclick: |_| {}, "{link}" }))
                 }
             }
-            div { display: "flex", flex_direction: "column", gap: "5px", min_width: "200px",
+            div { display: "flex", flex_direction: "column", gap: "10px", min_width: "200px",
                 Statistic { icon: IconKind::Download, "{total_downloads}" }
                 Statistic { icon: IconKind::History, "{recent_downloads}" }
                 Statistic { icon: IconKind::Schedule, "{last_update}" }
