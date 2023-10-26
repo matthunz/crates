@@ -48,8 +48,12 @@ fn ReadmeTab<'a>(cx: Scope<'a>, versions: &'a [Version]) -> Element<'a> {
             .map(|version| version.readme_path.clone())
             .unwrap_or_default();
         async move {
-            reqwest::get(&format!("https://crates.io{readme_path}")).await.unwrap().text().await.unwrap()
-            
+            reqwest::get(&format!("https://crates.io{readme_path}"))
+                .await
+                .unwrap()
+                .text()
+                .await
+                .unwrap()
         }
     });
 
@@ -58,7 +62,6 @@ fn ReadmeTab<'a>(cx: Scope<'a>, versions: &'a [Version]) -> Element<'a> {
     } else {
         None
     }
-    
 }
 
 #[component]
