@@ -1,7 +1,7 @@
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-pub struct CrateData {
+pub struct CrateItemData {
     pub name: String,
     pub description: Option<String>,
     pub newest_version: String,
@@ -12,11 +12,23 @@ pub struct CrateData {
 
 #[derive(Deserialize)]
 struct Data {
-    crates: Vec<CrateData>,
+    crates: Vec<CrateItemData>,
 }
 
-pub async fn crates(page: usize, per_page: usize) -> reqwest::Result<Vec<CrateData>> {
+pub async fn get_crates(page: usize, per_page: usize) -> reqwest::Result<Vec<CrateItemData>> {
     let uri = format!("https://crates.io/api/v1/crates?page={page}&per_page={per_page}&sort=alpha");
     let data: Data = reqwest::get(uri).await?.json().await?;
     Ok(data.crates)
+}
+
+#[derive(Deserialize)]
+pub struct CrateData {
+    #[serde(rename = "crate")]
+    pub krate: CrateItemData,
+}
+
+pub async fn get_crate(name: &str) -> reqwest::Result<CrateData> {
+    let uri = format!("https://crates.io/api/v1/crates/{name}");
+    let data = reqwest::get(uri).await?.json().await?;
+    Ok(data)
 }

@@ -11,7 +11,7 @@ pub fn CrateItem<'a>(
     recent_downloads: u32,
     last_update: &'a str,
     links: &'a [&'a str],
-    onclick: EventHandler<'a>
+    onclick: EventHandler<'a>,
 ) -> Element<'a> {
     let _theme = use_theme(cx);
 
@@ -95,18 +95,21 @@ pub fn CrateItemPreview<'a>(
     #[lookbook(default = vec![String::from("Homepage"), String::from("Documentation")])]
     links: lookbook::Json<Vec<String>>,
 ) -> Element<'a> {
-    render!(
-        CrateItem {
-            name: name,
-            version: version,
-            description: description,
-            total_downloads: total_downloads.0,
-            recent_downloads: recent_downloads.0,
-            last_update: last_update,
-            links: &**cx
-                .bump()
-                .alloc(links.0.iter().cloned().map(|s| &**cx.bump().alloc(s)).collect::<Vec<_>>()),
-            onclick: |_| {}
-        }
-    )
+    render!(CrateItem {
+        name: name,
+        version: version,
+        description: description,
+        total_downloads: total_downloads.0,
+        recent_downloads: recent_downloads.0,
+        last_update: last_update,
+        links: &**cx.bump().alloc(
+            links
+                .0
+                .iter()
+                .cloned()
+                .map(|s| &**cx.bump().alloc(s))
+                .collect::<Vec<_>>()
+        ),
+        onclick: |_| {}
+    })
 }

@@ -2,13 +2,13 @@ use dioxus::prelude::*;
 
 #[cfg(not(feature = "lookbook"))]
 fn main() {
-    use crates::ui::{KratesScreen, Route};
+    use crates::ui::Route;
     use dioxus_material::{IconFont, Theme};
     use dioxus_router::prelude::Router;
 
     fn app(cx: Scope) -> Element {
         render!(
-            Theme { 
+            Theme {
                 IconFont {}
                 Router::<Route> {}
             }
@@ -20,7 +20,7 @@ fn main() {
 
 #[cfg(feature = "lookbook")]
 fn main() {
-    use crates::ui::{CrateItemPreview,KratePreview};
+    use crates::ui::{CrateItemPreview, KratePreview};
     use lookbook::LookBook;
 
     #[component]
@@ -29,7 +29,10 @@ fn main() {
     }
 
     fn app(cx: Scope) -> Element {
-        render!( LookBook { home: Home, previews: [CrateItemPreview, KratePreview] } )
+        render!(LookBook {
+            home: Home,
+            previews: [CrateItemPreview, KratePreview]
+        })
     }
 
     dioxus_web::launch(app);

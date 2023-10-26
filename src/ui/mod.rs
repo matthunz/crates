@@ -6,7 +6,11 @@ mod crate_item;
 pub use crate_item::CrateItemPreview;
 pub use crate_item::{CrateItem, CrateItemProps};
 
+mod krate_screen;
+pub use krate_screen::KrateScreen;
+
 mod krates_screen;
+
 pub use krates_screen::KratesScreen;
 
 mod krate;
@@ -25,16 +29,12 @@ pub enum Route {
 
 #[component]
 pub fn Wrap(cx: Scope) -> Element {
-    render!( Outlet::<Route> {} )
-
+    render!(
+        div { font_family: "sans-serif", Outlet::<Route> {} }
+    )
 }
 
 #[component]
 pub fn HomeScreen(cx: Scope) -> Element {
-    render!( KratesScreen {} )
-}
-
-#[component]
-pub fn KrateScreen(cx: Scope, name: String) -> Element {
-    render!( h1 { "{name}" } )
+    render!(KratesScreen {})
 }

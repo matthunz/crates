@@ -14,7 +14,7 @@ pub fn KratesScreen(cx: Scope) -> Element {
     let crates = use_signal(cx, || None);
 
     use_effect(cx, (), |_| async move {
-        let data = api::crates(1, 50).await.unwrap();
+        let data = api::get_crates(1, 50).await.unwrap();
         crates.set(Some(data));
     });
 
@@ -31,9 +31,9 @@ pub fn KratesScreen(cx: Scope) -> Element {
                 render!(crates.iter().map(|krate| {
                     let date = Date::parse(&krate.updated_at);
                     let last_update = format_distance_to_now(date);
-            
+
                     let name = krate.name.clone();
-            
+
                     render!(CrateItem {
                         name: "{krate.name}",
                         version: "{krate.newest_version}",

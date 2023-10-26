@@ -1,11 +1,25 @@
 use dioxus::prelude::*;
-use dioxus_material::{Icon, IconKind, Tab, TabRow};
+use dioxus_material::{Chip, Icon, IconKind, Tab, TabRow};
 
 #[component]
-pub fn Krate<'a>(cx: Scope<'a>, name: &'a str) -> Element<'a> {
+pub fn Krate<'a>(
+    cx: Scope<'a>,
+    name: &'a str,
+    version: &'a str,
+    description: &'a str,
+) -> Element<'a> {
     render!(
-        div { width: "100%",
-            h1 { name }
+        div { width: "100%", max_width: "800px", margin: "auto",
+            div {
+                display: "flex",
+                flex_direction: "row",
+                align_items: "center",
+                gap: "10px",
+                h2 { name }
+                Chip { onclick: |_| {}, version }
+            }
+
+            p { description }
             TabRow {
                 onselect: |_| {},
                 tabs: cx
@@ -24,7 +38,7 @@ pub fn Krate<'a>(cx: Scope<'a>, name: &'a str) -> Element<'a> {
 #[component]
 fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
     render!(
-        Tab { 
+        Tab {
             div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 Icon { kind: *icon }
                 label
@@ -35,6 +49,17 @@ fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
 
 #[cfg(feature = "lookbook")]
 #[lookbook::preview]
-pub fn KratePreview<'a>(cx: Scope<'a>, #[lookbook(default = "tokio")] name: &'a str) -> Element<'a> {
-    render!( Krate { name: name } )
+pub fn KratePreview<'a>(
+    cx: Scope<'a>,
+    #[lookbook(default = "tokio")] name: &'a str,
+    /// Semver version of the crate.
+    #[lookbook(default = "v0.1.0")]
+    version: &'a str,
+    #[lookbook(default = "Hello world!")] description: &'a str,
+) -> Element<'a> {
+    render!(Krate {
+        name: name,
+        version: version,
+        description: description
+    })
 }
