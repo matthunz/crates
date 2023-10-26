@@ -15,8 +15,14 @@ struct Data {
     crates: Vec<CrateItemData>,
 }
 
-pub async fn get_crates(page: usize, per_page: usize) -> reqwest::Result<Vec<CrateItemData>> {
-    let uri = format!("https://crates.io/api/v1/crates?page={page}&per_page={per_page}&sort=alpha");
+pub async fn get_crates(
+    page: usize,
+    per_page: usize,
+    query: &str,
+) -> reqwest::Result<Vec<CrateItemData>> {
+    let uri = format!(
+        "https://crates.io/api/v1/crates?page={page}&per_page={per_page}&sort=alpha&q={query}"
+    );
     let data: Data = reqwest::get(uri).await?.json().await?;
     Ok(data.crates)
 }

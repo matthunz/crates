@@ -1,6 +1,7 @@
 use crate::{api, components::KrateItem, Route};
 use chrono::{TimeZone, Utc};
 use dioxus::prelude::*;
+use dioxus_material::{use_theme, Icon, TextField};
 use dioxus_router::prelude::use_navigator;
 use dioxus_signals::use_signal;
 use js_sys::Date;
@@ -8,10 +9,14 @@ use js_sys::Date;
 #[component]
 pub fn ExploreScreen(cx: Scope) -> Element {
     let navigator = use_navigator(cx);
+    let theme = use_theme(cx);
+
     let crates = use_signal(cx, || None);
+    let query = use_signal(cx, || String::new());
+    let query_str = query.read();
 
     use_effect(cx, (), |_| async move {
-        let data = api::get_crates(1, 50).await.unwrap();
+        let data = api::get_crates(1, 50, &query.read()).await.unwrap();
         crates.set(Some(data));
     });
 
@@ -24,6 +29,35 @@ pub fn ExploreScreen(cx: Scope) -> Element {
             max_width: "800px",
             margin: "auto",
             border_collapse: "collapse",
+            form {
+                display: "flex",
+                flex_direction: "row",
+                align_items: "center",
+                gap: "10px",
+                max_width: "500px",
+                margin: "20px auto",
+                padding: "10px 20px",
+                background: "#eee",
+                border_radius: &*theme.border_radius_small,
+                prevent_default: "onchange",
+                onsubmit: move |_| async move {
+                    let data = api::get_crates(1, 50, &query.read()).await.unwrap();
+                    crates.set(Some(data));
+                },
+                Icon { kind: dioxus_material::IconKind::Search }
+                input {
+                    value: "{query_str}",
+                    placeholder: "Search",
+                    flex: 1,
+                    margin: 0,
+                    padding: 0,
+                    font_size: "{theme.label_medium}px",
+                    outline: "none",
+                    border: "none",
+                    background: "none",
+                    onchange: move |event: FormEvent| { query.set(event.value.clone()) }
+                }
+            }
             if let Some(crates) = &*crates.read() {
                 render!(crates.iter().map(|krate| {
                     let date = Date::parse(&krate.updated_at);

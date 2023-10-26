@@ -1,5 +1,5 @@
-mod krate_screen;
-pub use krate_screen::KrateScreen;
+mod krate;
+pub use krate::KrateScreen;
 
-mod explore_screen;
-pub use explore_screen::ExploreScreen;
+mod explore;
+pub use explore::ExploreScreen;
