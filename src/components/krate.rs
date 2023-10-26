@@ -10,6 +10,8 @@ pub fn Krate<'a>(
     version: &'a str,
     description: &'a str,
     versions: &'a [Version],
+    selected: usize,
+    onselect: EventHandler<'a, usize>
 ) -> Element<'a> {
     render!(
         div { width: "100%", max_width: "800px", margin: "auto",
@@ -19,7 +21,8 @@ pub fn Krate<'a>(
             }
             p { description }
             TabRow {
-                onselect: |_| {},
+                selected: *selected,
+                onselect: |idx| onselect.call(idx),
                 tabs: cx
                     .bump()
                     .alloc([
@@ -29,11 +32,7 @@ pub fn Krate<'a>(
                         render!(TabItem { icon : IconKind::AccountTree, label : "Dependents" }),
                     ])
             }
-            versions.iter().map(|version| render!(li {
-                div {
-                    "{version.num}"
-                }
-            }))
+            ul { list_style: "none", versions.iter().map(|version| render!(li { "{version.num}" })) }
         }
     )
 }
@@ -76,7 +75,9 @@ pub fn KratePreview<'a>(
             name: name,
             version: version,
             description: description,
-            versions: cx.bump().alloc(versions.0.clone())
+            versions: cx.bump().alloc(versions.0.clone()),
+            selected: 0,
+            onselect: |_| {}
         }
     )
 }

@@ -46,7 +46,7 @@ pub fn SearchScreen(cx: Scope, query: String) -> Element {
                         last_update: "{last_update}",
                         links: &[],
                         onclick: move |_| {
-                            navigator.push(Route::KrateScreen { name: name.clone()  });
+                            navigator.push(Route::KrateScreen { name: name.clone(), tab: crate::KrateTab::Readme });
                         }
                     })
                 }))

@@ -1,3 +1,5 @@
+use std::{str::FromStr, fmt};
+
 use dioxus::prelude::*;
 use dioxus_material::{use_theme, Icon, IconKind, NavigationRail, NavigationRailItem};
 use dioxus_router::prelude::*;
@@ -10,6 +12,33 @@ pub mod components;
 mod screens;
 use self::screens::{ExploreScreen, KrateScreen, SearchScreen};
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum KrateTab {
+    Readme,
+    Versions
+}
+
+impl FromStr for KrateTab {
+    type Err = String;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+       Ok( match s {
+            "readme" => Self::Readme,
+            "versions" => Self::Versions,
+            _ => todo!()
+        })
+    }
+}
+
+impl fmt::Display for KrateTab {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", match self {
+            Self::Readme => "readme",
+            Self::Versions => "versions"
+        })
+    }
+}
+
 #[derive(Clone, Routable, Debug, PartialEq)]
 pub enum Route {
     #[layout(Wrap)]
@@ -17,9 +46,10 @@ pub enum Route {
     ExploreScreen,
     #[route("/search/?:query")]
     SearchScreen { query: String },
-    #[route("/crate/:name")]
-    KrateScreen { name: String },
+    #[route("/crate/:name/:tab")]
+    KrateScreen { name: String, tab: KrateTab }
 }
+
 
 #[component]
 pub fn Wrap(cx: Scope) -> Element {
