@@ -29,10 +29,19 @@ pub async fn get_crates(
 }
 
 #[derive(Clone, Deserialize, Serialize)]
+pub struct PublishedBy {
+    pub  avatar: String,
+    pub  name: String,
+    pub  login: String,
+    pub  url: String
+}
+
+#[derive(Clone, Deserialize, Serialize)]
 pub struct Version {
     pub features: HashMap<String, Vec<String>>,
     pub num: String,
     pub readme_path: String,
+    pub published_by: PublishedBy
 }
 
 #[derive(Clone, Deserialize, Serialize)]

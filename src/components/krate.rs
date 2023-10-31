@@ -41,11 +41,17 @@ pub fn Krate<'a>(
                 }
                 match selected {
                     0 => render!(ReadmeTab { versions: *versions }),
-                    1 => render!(ul { display: "flex", flex_direction: "column", gap: "10px", list_style: "none", versions.iter().map(|version| render!(li { "{version.num}" })) }),
+                    1 => render!(ul { display: "flex", flex_direction: "column", gap: "10px", list_style: "none", versions.iter().map(|v| render!(VersionItem {
+                        num: &*v.num,
+                        author_name: &*v.published_by.name,
+                        author_avatar: &*v.published_by.avatar,
+                        is_selected: v.num == *version
+                
+                    })) }),
                     _ => todo!()
                 }
             }
-            div { flex: 1, display: "flex", flex_direction: "column", gap: "30px", max_width: "200px",
+            div { flex: 1, display: "flex", flex_direction: "column", gap: "30px", max_width: "300px",
                 div { flex: 1, display: "flex", flex_direction: "column", gap: "15px",
                     h4 { margin: 0, padding: 0, "Install" }
                     p { color: "#777", font_size: "14px", margin: 0, padding: 0,
@@ -91,6 +97,29 @@ fn InstallButton<'a>(cx: Scope<'a>, label: &'a str, onpress: EventHandler<'a>) -
 }
 
 #[component]
+fn VersionItem<'a>(cx: Scope<'a>, num: &'a str, author_name: &'a str, author_avatar: &'a str, is_selected: bool) -> Element<'a> {
+    render!(
+        li { display: "flex", flex_direction: "row", align_items: "center", gap: "20px",
+            div { width: "100px",
+                Chip { onclick: |_| {}, is_selected: *is_selected, div { font_size: "14px", font_weight: 600, "{num}" } }
+            }
+            div {
+                div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
+                    div {
+                        width: "40px",
+                        height: "40px",
+                        border_radius: "50%",
+                        background_image: "url('{author_avatar}')",
+                        background_size: "contain"
+                    }
+                    span { "{author_name}" }
+                }
+            }
+        }
+    )
+}
+
+#[component]
 fn ReadmeTab<'a>(cx: Scope<'a>, versions: &'a [Version]) -> Element<'a> {
     let readme_task = use_future(cx, (), |_| {
         let readme_path = versions
@@ -108,9 +137,7 @@ fn ReadmeTab<'a>(cx: Scope<'a>, versions: &'a [Version]) -> Element<'a> {
     });
 
     if let Some(readme) = readme_task.value() {
-        render!(div {
-            dangerous_inner_html: "{readme}"
-        })
+        render!( div { dangerous_inner_html: "{readme}" } )
     } else {
         None
     }
@@ -119,7 +146,7 @@ fn ReadmeTab<'a>(cx: Scope<'a>, versions: &'a [Version]) -> Element<'a> {
 #[component]
 fn TabItem<'a>(cx: Scope<'a>, icon: IconKind, label: &'a str) -> Element<'a> {
     render!(
-        Tab {
+        Tab { 
             div { display: "flex", flex_direction: "row", align_items: "center", gap: "10px",
                 Icon { kind: *icon }
                 label
@@ -151,23 +178,33 @@ pub fn KratePreview<'a>(
 
     #[lookbook(default =categories())] categories: lookbook::Json<Vec<Category>>,
 ) -> Element<'a> {
-    render!(Krate {
-        name: name,
-        version: version,
-        description: description,
-        versions: cx.bump().alloc(versions.0.clone()),
-        selected: 0,
-        categories: cx.bump().alloc(categories.0.clone()),
-        onselect: |_| {}
-    })
+    render!(
+        Krate {
+            name: name,
+            version: version,
+            description: description,
+            versions: cx.bump().alloc(versions.0.clone()),
+            selected: 0,
+            categories: cx.bump().alloc(categories.0.clone()),
+            onselect: |_| {}
+        }
+    )
 }
 
 #[cfg(feature = "lookbook")]
 fn versions() -> Vec<Version> {
+    use crate::api::PublishedBy;
+
     vec![Version {
         features: std::collections::HashMap::new(),
         num: String::from("v0.1.0"),
         readme_path: String::from(""),
+        published_by: PublishedBy {
+            avatar: String::from(""),
+            name: String::from("Matt Hunzinger"),
+            login: String::from("matthunz"),
+            url: String::from(""),
+        },
     }]
 }
 

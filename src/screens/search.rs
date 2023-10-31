@@ -33,9 +33,9 @@ pub fn SearchScreen(cx: Scope, query: String) -> Element {
                 render!(crates.iter().map(|krate| {
                     let date = Date::parse(&krate.updated_at);
                     let last_update = format_distance_to_now(date);
-
+            
                     let name = krate.name.clone();
-
+            
                     render!(KrateItem {
                         name: "{krate.name}",
                         version: "{krate.newest_version}",

@@ -24,25 +24,28 @@ pub fn KrateScreen(cx: Scope, name: String, tab: KrateTab) -> Element {
     if let Some(krate) = &*crates_ref {
         let description = krate.krate.description.as_deref().unwrap_or_default();
 
-        render!(Krate {
-            name: "{name}",
-            description: "{description}",
-            version: "{krate.krate.newest_version}",
-            versions: cx.bump().alloc(krate.versions.clone()),
-            selected: selected,
-            categories: cx.bump().alloc(krate.categories.clone()),
-            onselect: |idx| {
-                let tab = match idx {
-                    0 => KrateTab::Readme,
-                    1 => KrateTab::Versions,
-                    _ => todo!(),
-                };
-                navigator.push(Route::KrateScreen {
-                    name: name.clone(),
-                    tab,
-                });
+        render!(
+            Krate {
+                name: "{name}",
+                description: "{description}",
+                version: "{krate.krate.newest_version}",
+                versions: cx.bump().alloc(krate.versions.clone()),
+                selected: selected,
+                categories: cx.bump().alloc(krate.categories.clone()),
+                onselect: |idx| {
+                    let tab = match idx {
+                        0 => KrateTab::Readme,
+                        1 => KrateTab::Versions,
+                        _ => todo!(),
+                    };
+                    navigator
+                        .push(Route::KrateScreen {
+                            name: name.clone(),
+                            tab,
+                        });
+                }
             }
-        })
+        )
     } else {
         None
     }
