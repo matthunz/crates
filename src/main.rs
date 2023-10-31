@@ -8,7 +8,7 @@ fn main() {
 
     fn app(cx: Scope) -> Element {
         render!(
-            Theme { 
+            Theme {
                 IconFont {}
                 Router::<Route> {}
             }
@@ -29,7 +29,10 @@ fn main() {
     }
 
     fn app(cx: Scope) -> Element {
-        render!( LookBook { home: Home, previews: [KrateItemPreview, KratePreview] } )
+        render!(LookBook {
+            home: Home,
+            previews: [KrateItemPreview, KratePreview]
+        })
     }
 
     dioxus_web::launch(app);

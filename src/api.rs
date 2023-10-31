@@ -28,18 +28,24 @@ pub async fn get_crates(
     Ok(data.crates)
 }
 
-#[derive(Deserialize)]
-pub struct CrateData {
-    #[serde(rename = "crate")]
-    pub krate: CrateItemData,
-    pub versions: Vec<Version>,
-}
-
 #[derive(Clone, Deserialize, Serialize)]
 pub struct Version {
     pub features: HashMap<String, Vec<String>>,
     pub num: String,
     pub readme_path: String,
+}
+
+#[derive(Clone, Deserialize, Serialize)]
+pub struct Category {
+    pub category: String,
+}
+
+#[derive(Deserialize)]
+pub struct CrateData {
+    #[serde(rename = "crate")]
+    pub krate: CrateItemData,
+    pub versions: Vec<Version>,
+    pub categories: Vec<Category>,
 }
 
 pub async fn get_crate(name: &str) -> reqwest::Result<CrateData> {
