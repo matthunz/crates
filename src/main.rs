@@ -1,6 +1,7 @@
 use concoct::{hook::use_state, web::html, Body, View};
 use screen::CrateScreen;
 use wasm_bindgen_futures::spawn_local;
+use web_sys::{wasm_bindgen::JsCast, HtmlElement, HtmlInputElement, InputEvent};
 
 mod api;
 
@@ -10,7 +11,29 @@ struct App;
 
 impl View for App {
     fn body(&self) -> impl Body {
-        CrateScreen::new(String::from("concoct"))
+        let (name, set_name) = use_state(|| None);
+        let (query, set_query) = use_state(|| String::new());
+
+        (
+            html::form((
+                html::input(())
+                    .on_input(move |event| {
+                        let event: &InputEvent = event.unchecked_ref();
+                        let target = event.target().unwrap();
+                        let input: &HtmlInputElement = target.unchecked_ref();
+                        set_query(input.value())
+                    })
+                    .attr("value", query.to_string()),
+                html::input(()).attr("type", "submit"),
+            ))
+            .on_submit(move |event| {
+                event.prevent_default();
+                set_name(Some(query.clone()));
+            }),
+            (&*name)
+                .as_ref()
+                .map(|name| CrateScreen::new(name.to_string())),
+        )
     }
 }
 
