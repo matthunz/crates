@@ -1,0 +1,11 @@
+[package]
+name = "crates"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+concoct = { git = "https://github.com/concoct-rs/concoct" }
+wasm-bindgen-futures = "0.4.40"
+console_error_panic_hook = "0.1.7"
+tracing-wasm = { version = "0.2.1" }
+tracing = "0.1.40"
