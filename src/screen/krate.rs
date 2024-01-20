@@ -1,12 +1,13 @@
 use crate::api;
 use concoct::{
-    hook::{use_ref, use_state},
+    hook::{use_effect, use_state},
     View,
 };
 use concoct_web::html;
 use std::rc::Rc;
 use wasm_bindgen_futures::spawn_local;
 
+#[derive(Clone)]
 pub struct CrateScreen {
     name: String,
 }
@@ -19,11 +20,10 @@ impl CrateScreen {
 
 impl View for CrateScreen {
     fn body(&self) -> impl concoct::Body {
-        let name = self.name.clone();
-
         let (data, set_data) = use_state(|| None);
 
-        use_ref(move || {
+        let name = self.name.clone();
+        use_effect(&self.name, move || {
             spawn_local(async move {
                 let crate_data = api::get_crate(&name).await;
                 set_data(Some(Rc::new(crate_data.krate)));

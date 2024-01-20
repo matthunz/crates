@@ -4,8 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-concoct = { git = "https://github.com/concoct-rs/concoct" }
-concoct-web = { git = "https://github.com/concoct-rs/concoct" }
+# concoct = { git = "https://github.com/concoct-rs/concoct" }
+# concoct-web = { git = "https://github.com/concoct-rs/concoct" }
+concoct = { path = "../concoct/crates/concoct" }
+concoct-web = { path = "../concoct/crates/concoct-web" }
 wasm-bindgen-futures = "0.4.40"
 console_error_panic_hook = "0.1.7"
 tracing-wasm = { version = "0.2.1" }

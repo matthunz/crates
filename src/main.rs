@@ -1,4 +1,4 @@
-use concoct::{hook::use_state, Body, View};
+use concoct::{hook::use_state, Body, OneOf2, View};
 use concoct_web::html;
 use screen::CrateScreen;
 use wasm_bindgen_futures::spawn_local;
@@ -8,14 +8,26 @@ mod api;
 
 mod screen;
 
+#[derive(Clone)]
+enum Screen {
+    Home,
+    Crate(CrateScreen),
+}
+
 struct App;
 
 impl View for App {
     fn body(&self) -> impl Body {
-        let (name, set_name) = use_state(|| None);
         let (query, set_query) = use_state(|| String::new());
+        let (screen, set_screen) = use_state(|| Screen::Home);
 
         (
+            html::h5(html::a("Crates").on_click({
+                let set_screen = set_screen.clone();
+                move |_| {
+                    set_screen(Screen::Home);
+                }
+            })),
             html::form((
                 html::input(())
                     .on_input(move |event| {
@@ -29,9 +41,12 @@ impl View for App {
             ))
             .on_submit(move |event| {
                 event.prevent_default();
-                set_name(Some(query.clone()));
+                set_screen(Screen::Crate(CrateScreen::new(query.clone())));
             }),
-            name.as_ref().map(|name| CrateScreen::new(name.to_string())),
+            match screen {
+                Screen::Home => OneOf2::A("Home"),
+                Screen::Crate(crate_screen) => OneOf2::B(crate_screen.clone()),
+            },
         )
     }
 }
@@ -44,5 +59,5 @@ fn main() {
             .build(),
     );
 
-    spawn_local(concoct::run(App))
+    spawn_local(concoct_web::run(App))
 }

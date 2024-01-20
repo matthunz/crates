@@ -86,9 +86,9 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 [[package]]
 name = "concoct"
 version = "0.17.0-alpha.2"
-source = "git+https://github.com/concoct-rs/concoct#1975da74bec65337313dde554eebaef9ad2b6e2b"
 dependencies = [
  "futures",
+ "rustc-hash",
  "slotmap",
  "tracing",
 ]
@@ -96,7 +96,6 @@ dependencies = [
 [[package]]
 name = "concoct-web"
 version = "0.1.0-alpha.1"
-source = "git+https://github.com/concoct-rs/concoct#1975da74bec65337313dde554eebaef9ad2b6e2b"
 dependencies = [
  "concoct",
  "web-sys",
@@ -663,6 +662,12 @@ name = "rustc-demangle"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d626bb9dae77e28219937af045c257c28bfd3f69333c512553507f5f9798cb76"
+
+[[package]]
+name = "rustc-hash"
+version = "1.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "08d43f7aa6b08d49f382cde6a7982047c3426db949b1424bc4b7ec9ae12c6ce2"
 
 [[package]]
 name = "rustix"
