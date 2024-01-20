@@ -85,12 +85,20 @@ checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
 name = "concoct"
-version = "0.17.0-alpha.1"
+version = "0.17.0-alpha.2"
+source = "git+https://github.com/concoct-rs/concoct#1975da74bec65337313dde554eebaef9ad2b6e2b"
 dependencies = [
- "bumpalo",
  "futures",
  "slotmap",
  "tracing",
+]
+
+[[package]]
+name = "concoct-web"
+version = "0.1.0-alpha.1"
+source = "git+https://github.com/concoct-rs/concoct#1975da74bec65337313dde554eebaef9ad2b6e2b"
+dependencies = [
+ "concoct",
  "web-sys",
 ]
 
@@ -125,6 +133,7 @@ name = "crates"
 version = "0.1.0"
 dependencies = [
  "concoct",
+ "concoct-web",
  "console_error_panic_hook",
  "reqwest",
  "serde",

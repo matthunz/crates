@@ -1,7 +1,8 @@
-use concoct::{hook::use_state, web::html, Body, View};
+use concoct::{hook::use_state, Body, View};
+use concoct_web::html;
 use screen::CrateScreen;
 use wasm_bindgen_futures::spawn_local;
-use web_sys::{wasm_bindgen::JsCast, HtmlElement, HtmlInputElement, InputEvent};
+use web_sys::{wasm_bindgen::JsCast, HtmlInputElement, InputEvent};
 
 mod api;
 
@@ -30,9 +31,7 @@ impl View for App {
                 event.prevent_default();
                 set_name(Some(query.clone()));
             }),
-            (&*name)
-                .as_ref()
-                .map(|name| CrateScreen::new(name.to_string())),
+            name.as_ref().map(|name| CrateScreen::new(name.to_string())),
         )
     }
 }
