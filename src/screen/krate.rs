@@ -1,7 +1,8 @@
-use crate::api::{self, CrateData, Version};
+use crate::api::{self, Version};
 use concoct::{
     hook::{use_effect, use_state},
-    Body, OneOf2, OneOf4, View,
+    view::{OneOf2, OneOf4},
+    View, ViewBuilder,
 };
 use concoct_web::html;
 use std::rc::Rc;
@@ -26,8 +27,8 @@ impl CrateScreen {
     }
 }
 
-impl View for CrateScreen {
-    fn body(&self) -> impl Body {
+impl ViewBuilder for CrateScreen {
+    fn build(&self) -> impl View {
         let (data, set_data) = use_state(|| None);
         let (tab, set_tab) = use_state(|| Tab::Readme);
 
@@ -79,8 +80,8 @@ struct Readme {
     version: String,
 }
 
-impl View for Readme {
-    fn body(&self) -> impl Body {
+impl ViewBuilder for Readme {
+    fn build(&self) -> impl View {
         let (content, set_content) = use_state(|| None);
 
         use_effect(&self.crate_name, || {
@@ -98,7 +99,7 @@ impl View for Readme {
     }
 }
 
-fn tab_item(name: &'static str, tab: Tab, set_tab: Rc<dyn Fn(Tab)>) -> impl View {
+fn tab_item(name: &'static str, tab: Tab, set_tab: impl Fn(Tab) + 'static) -> impl View {
     html::li(html::a(name).on_click(move |_| set_tab(tab))).class("tab")
 }
 
@@ -106,7 +107,7 @@ fn link_item(url: &str) -> impl View {
     html::li(html::a(url.to_owned()))
 }
 
-fn versions(versions: &[Version]) -> impl Body {
+fn versions(versions: &[Version]) -> impl View {
     versions
         .iter()
         .map(|version| (version.num.clone(), html::li(version.num.clone())))

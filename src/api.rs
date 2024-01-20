@@ -2,7 +2,7 @@ use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
 pub struct Version {
-    pub num: String
+    pub num: String,
 }
 
 #[derive(Debug, Deserialize)]

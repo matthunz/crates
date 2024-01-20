@@ -1,4 +1,4 @@
-use concoct::{hook::use_state, Body, OneOf2, View};
+use concoct::{hook::use_state, memo, view::OneOf2, View, ViewBuilder};
 use concoct_web::html;
 use screen::CrateScreen;
 use wasm_bindgen_futures::spawn_local;
@@ -16,8 +16,8 @@ enum Screen {
 
 struct App;
 
-impl View for App {
-    fn body(&self) -> impl Body {
+impl ViewBuilder for App {
+    fn build(&self) -> impl View {
         let (query, set_query) = use_state(|| String::new());
         let (screen, set_screen) = use_state(|| Screen::Home);
 
@@ -39,7 +39,7 @@ impl View for App {
                         })
                         .kind("text")
                         .attr("value", query.to_string()),
-                    html::input(()).kind("submit"),
+                    memo((), html::input(()).kind("submit")),
                 ))
                 .class("search")
                 .on_submit(move |event| {
