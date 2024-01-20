@@ -1,7 +1,7 @@
-use crate::api;
+use crate::api::{self, CrateData, Version};
 use concoct::{
     hook::{use_effect, use_state},
-    View,
+    Body, OneOf2, OneOf4, View,
 };
 use concoct_web::html;
 use std::rc::Rc;
@@ -27,7 +27,7 @@ impl CrateScreen {
 }
 
 impl View for CrateScreen {
-    fn body(&self) -> impl concoct::Body {
+    fn body(&self) -> impl Body {
         let (data, set_data) = use_state(|| None);
         let (tab, set_tab) = use_state(|| Tab::Readme);
 
@@ -35,7 +35,7 @@ impl View for CrateScreen {
         use_effect(&self.name, move || {
             spawn_local(async move {
                 let crate_data = api::get_crate(&name).await;
-                set_data(Some(Rc::new(crate_data.krate)));
+                set_data(Some(Rc::new(crate_data)));
             })
         });
 
@@ -43,28 +43,58 @@ impl View for CrateScreen {
             html::h1(self.name.clone()),
             data.as_ref().map(|data| {
                 (
-                    html::h2(data.max_stable_version.clone()),
-                    html::p(data.description.clone()),
+                    html::h2(data.krate.max_stable_version.clone()),
+                    html::p(data.krate.description.clone()),
                     html::ul((
-                        data.homepage.as_ref().map(|homepage| link_item(homepage)),
-                        data.repository.as_ref().map(|repo| link_item(repo)),
+                        data.krate
+                            .homepage
+                            .as_ref()
+                            .map(|homepage| link_item(homepage)),
+                        data.krate.repository.as_ref().map(|repo| link_item(repo)),
                     )),
+                    html::ul((
+                        tab_item("Readme", Tab::Readme, set_tab.clone()),
+                        tab_item("Versions", Tab::Versions, set_tab.clone()),
+                        tab_item("Dependencies", Tab::Dependencies, set_tab.clone()),
+                        tab_item("Dependants", Tab::Dependants, set_tab),
+                    ))
+                    .class("tabs"),
+                    match tab {
+                        Tab::Readme => OneOf4::A(Readme {
+                            crate_name: self.name.clone(),
+                            version: data.krate.max_stable_version.clone(),
+                        }),
+                        Tab::Versions => OneOf4::B(versions(&data.versions)),
+                        Tab::Dependencies => OneOf4::C("Dependencies"),
+                        Tab::Dependants => OneOf4::D("Dependants"),
+                    },
                 )
             }),
-            html::ul((
-                tab_item("Readme", Tab::Readme, set_tab.clone()),
-                tab_item("Versions", Tab::Versions, set_tab.clone()),
-                tab_item("Dependencies", Tab::Dependencies, set_tab.clone()),
-                tab_item("Dependants", Tab::Dependants, set_tab),
-            ))
-            .class("tabs"),
-            match tab {
-                Tab::Readme => "Readme",
-                Tab::Versions => "Versions",
-                Tab::Dependencies => "Dependencies",
-                Tab::Dependants => "Dependants",
-            },
         )
+    }
+}
+
+struct Readme {
+    crate_name: String,
+    version: String,
+}
+
+impl View for Readme {
+    fn body(&self) -> impl Body {
+        let (content, set_content) = use_state(|| None);
+
+        use_effect(&self.crate_name, || {
+            let name = self.crate_name.clone();
+            let version = self.version.clone();
+            spawn_local(async move {
+                let readme = api::get_readme(&name, &version).await;
+                set_content(Some(readme));
+            })
+        });
+
+        content
+            .map(|content| OneOf2::A(content))
+            .unwrap_or_else(|| OneOf2::B("Loading..."))
     }
 }
 
@@ -74,4 +104,11 @@ fn tab_item(name: &'static str, tab: Tab, set_tab: Rc<dyn Fn(Tab)>) -> impl View
 
 fn link_item(url: &str) -> impl View {
     html::li(html::a(url.to_owned()))
+}
+
+fn versions(versions: &[Version]) -> impl Body {
+    versions
+        .iter()
+        .map(|version| (version.num.clone(), html::li(version.num.clone())))
+        .collect::<Vec<_>>()
 }

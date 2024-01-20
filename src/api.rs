@@ -1,6 +1,11 @@
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
+pub struct Version {
+    pub num: String
+}
+
+#[derive(Debug, Deserialize)]
 pub struct Crate {
     pub name: String,
     pub description: String,
@@ -13,6 +18,7 @@ pub struct Crate {
 pub struct CrateData {
     #[serde(rename = "crate")]
     pub krate: Crate,
+    pub versions: Vec<Version>,
 }
 
 #[derive(Debug, Deserialize)]

@@ -45,9 +45,12 @@ input {
   flex: 1;
   padding: 0 20px;
   font: 18px monospace;
+  background: #f8faf1;
+}
+
+.search input[type="text"]:focus {
   border: 2px solid #75796e;
   border-right: none;
-  background: #f8faf1;
 }
 
 .search input[type="submit"] {
